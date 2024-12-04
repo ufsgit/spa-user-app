@@ -1,0 +1,119 @@
+import 'package:spa_app_user/constants/theme/app_colors.dart';
+import 'package:spa_app_user/view/widgets/home/add_new_staff_widget.dart';
+import 'package:spa_app_user/view/widgets/home/back_button_widget.dart';
+import 'package:spa_app_user/view/widgets/home/home_text_field_widget.dart';
+import 'package:spa_app_user/view/widgets/home/list_tile_widget.dart';
+import 'package:spa_app_user/view/widgets/home/staff_details_widget.dart';
+import 'package:flutter/material.dart';
+
+import '../../widgets/common_widgets.dart';
+
+class ManageUsersPage extends StatelessWidget {
+  const ManageUsersPage({super.key});
+
+  void showStaffDetailsSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => StaffDetailsWidget());
+  }
+
+  void showAddStaffSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddNewStaffWidget());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    BackButtonWidget(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                        'Manage users',
+                        style: defaultTextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textBlack),
+                      )),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                HomeTextFieldWidget(
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: AppColors.textGrey600,
+                      size: 24,
+                    ),
+                    controller: TextEditingController(),
+                    hintText: 'Search'),
+                const SizedBox(
+                  height: 16,
+                ),
+                ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemCount: 5,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        showStaffDetailsSheet(context);
+                      },
+                      child: ListTileWidget(
+                          isPackage: false,
+                          staffName: 'Staff Name',
+                          userType: 'userType',
+                          statusColor: AppColors.buttonRed),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: InkWell(
+            onTap: () {
+              showAddStaffSheet(context);
+            },
+            child: Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                  color: AppColors.appThemeOrange,
+                  borderRadius: BorderRadius.circular(100)),
+              child: Icon(
+                Icons.add,
+                color: AppColors.textWhite,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
